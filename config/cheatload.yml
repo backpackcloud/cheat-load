@@ -1,0 +1,8 @@
+threads: 1
+executors:
+  - executor:
+      type: infinispan
+      hotrod_client:
+        server_list: localhost:11222
+        auth_username: developer
+        auth_password: backpackcloud
