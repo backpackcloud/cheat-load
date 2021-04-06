@@ -1,13 +1,11 @@
 let chart
-let durationChart
 let series = {}
-let finishedJobs = {}
 
 $(document).ready(function () {
     let socket;
     chart = Highcharts.chart('job-details', {
         chart: {
-            type: 'spline',
+            type: 'line',
             scrollablePlotArea: {
                 minWidth: 600,
                 scrollPositionX: 1
@@ -33,41 +31,10 @@ $(document).ready(function () {
             crosshairs: true,
             shared: true
         },
-        plotOptions: {
-            spline: {
-                marker: {
-                    radius: 4,
-                    lineColor: '#666666',
-                    lineWidth: 1
-                }
-            }
-        },
         credits: {
             enabled: false
         },
     });
-
-    durationChart = Highcharts.chart('job-duration', {
-        chart: {
-            type: 'bar'
-        },
-        title: {
-            text: 'Job Duration'
-        },
-        yAxis: {
-            min: 0,
-            labels: {
-                format: '{value}s'
-            },
-        },
-        series: [{
-            name: 'Finished Jobs',
-            data: []
-        }],
-        credits: {
-            enabled: false
-        },
-    })
 
     let createChartData = function (job) {
         let data = []
@@ -129,22 +96,7 @@ $(document).ready(function () {
                 data: createChartData(job)
             }, false)
         }
-
-        if (job.state === "SUCCESS") {
-            finishedJobs[job.id] = job
-        }
     };
-
-    let updateDurationChart = function () {
-        let categories = []
-        let data = []
-        for (let id in finishedJobs) {
-            categories.push(finishedJobs[id].spec.name)
-            data.push(finishedJobs[id].statistics.duration / 1000)
-        }
-        durationChart.xAxis[0].setCategories(categories)
-        durationChart.series[0].setData(data, false)
-    }
 
     $.ajax({
         url: "jobs",
@@ -152,9 +104,7 @@ $(document).ready(function () {
         dataType: "json",
         success: function (data) {
             data.values.forEach(updateJob)
-            updateDurationChart()
             chart.redraw()
-            durationChart.redraw()
         }
     });
 
@@ -167,8 +117,6 @@ $(document).ready(function () {
         let jobEvent = JSON.parse(m.data);
         let job = jobEvent.job;
         updateJob(job)
-        updateDurationChart()
         chart.redraw()
-        durationChart.redraw()
     };
 })
