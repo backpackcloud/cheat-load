@@ -6,6 +6,7 @@ import com.backpackcloud.cheatload.JobManager;
 import com.backpackcloud.papi.hateoas.ApiCollectionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.vertx.ConsumeEvent;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -44,7 +45,20 @@ public class WebsocketController {
     sessions.remove(session.getId());
   }
 
+  @ConsumeEvent("job.created")
+  public void onJobCreated(Job job) {
+    sendUpdate("job.created", job);
+  }
 
+  @ConsumeEvent("job.updated")
+  public void onJobUpdated(Job job) {
+    sendUpdate("job.updated", job);
+  }
+
+  @ConsumeEvent("job.finished")
+  public void onJobFinished(Job job) {
+    sendUpdate("job.finished", job);
+  }
 
   private void sendUpdate(String eventName, Job job) {
     sessions.values().forEach(session -> {
