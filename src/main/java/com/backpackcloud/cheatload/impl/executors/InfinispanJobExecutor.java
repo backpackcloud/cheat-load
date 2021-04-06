@@ -40,21 +40,11 @@ public class InfinispanJobExecutor implements JobExecutor<InfinispanJob> {
   @Override
   public void execute(InfinispanJob job) {
     LOGGER.infof("[%s] Initializing", job.id());
-    RemoteCache<String, byte[]> cache = remoteCacheManager.getCache(job.spec().cache());
 
-    job.picked();
+    RemoteCache<String, byte[]> cache = remoteCacheManager.getCache(job.spec().cache());
     byte[] data = new byte[job.spec().size()];
 
-    new JobRunner(n -> {
-      try {
-        cache.put(UUID.randomUUID().toString(), data);
-      } catch (Exception e) {
-        LOGGER.errorf(e, "[%s] Error while adding data", job.id());
-        job.failed();
-      }
-    }).run(job);
-
-    job.done();
+    new JobRunner<>(job).run(n -> cache.put(UUID.randomUUID().toString(), data));
   }
 
 }

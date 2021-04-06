@@ -21,6 +21,12 @@ public interface Job {
   @JsonProperty
   JobState state();
 
+  void pick();
+
+  void fail();
+
+  void done();
+
   @JsonIgnore
   default boolean isWaiting() {
     return state() == JobState.WAITING;

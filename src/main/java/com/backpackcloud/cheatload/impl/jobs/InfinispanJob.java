@@ -42,21 +42,21 @@ public class InfinispanJob implements Job {
     return statistics;
   }
 
-  public synchronized void picked() {
+  public void pick() {
     if (state == JobState.WAITING) {
       state = JobState.RUNNING;
       statistics.start();
     }
   }
 
-  public synchronized void failed() {
+  public void fail() {
     if (state == JobState.RUNNING) {
       state = JobState.FAIL;
       statistics.end();
     }
   }
 
-  public synchronized void done() {
+  public void done() {
     if (state == JobState.RUNNING) {
       state = JobState.SUCCESS;
       statistics.end();

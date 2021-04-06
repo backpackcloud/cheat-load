@@ -10,17 +10,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-public class JobRunner {
+public class JobRunner<E extends Job> {
 
   private static final Logger LOGGER = Logger.getLogger(JobRunner.class);
 
-  private final Consumer<Long> action;
+  private final E job;
 
-  public JobRunner(Consumer<Long> action) {
-    this.action = action;
+  public JobRunner(E job) {
+    this.job = job;
   }
 
-  public void run(Job job) {
+  public void run(Consumer<Long> action) {
     LOGGER.infof("[%s] Initializing", job.id());
     int threads = job.spec().threads();
     ExecutorService executorService = Executors.newFixedThreadPool(threads);
@@ -28,6 +28,9 @@ public class JobRunner {
 
     long entries = job.spec().quantity();
     JobStatistics statistics = job.statistics();
+
+    job.pick();
+
     for (int i = 0; i < threads; i++) {
       executorService.execute(() -> {
         while (job.isRunning()) {
@@ -35,7 +38,12 @@ public class JobRunner {
           if (!(n <= entries)) break;
 
           statistics.incrementCount();
-          action.accept(n);
+          try {
+            action.accept(n);
+          } catch (Exception e) {
+            LOGGER.errorf(e, "[%s] Error while loading data", job.id());
+            job.fail();
+          }
         }
       });
     }
@@ -45,6 +53,7 @@ public class JobRunner {
     } catch (InterruptedException e) {
       LOGGER.errorf(e, "[%s] Error while waiting for job to finish", job.id());
     }
+    job.done();
   }
 
 }
