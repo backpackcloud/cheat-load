@@ -12,10 +12,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public interface JobSpec {
 
   @JsonProperty
+  String name();
+
+  @JsonProperty
   String type();
 
   @JsonProperty
   long quantity();
+
+  @JsonProperty
+  int threads();
 
   Job newJob();
 
