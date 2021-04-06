@@ -47,15 +47,18 @@ public class StandaloneJobManager implements JobManager {
     });
     snapshotService.submit(() -> {
       JobSnapshot snapshot;
-      while (!job.isFinished()) {
-        snapshot = job.statistics().takeSnapshot();
-        broadcaster.broadcast("job.snapshot.taken", snapshot);
-        broadcaster.broadcast("job.updated", job);
+      while (true) {
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {
           LOGGER.errorf(e, "[%s] Error while waiting for next snapshot generation", job.id());
         }
+        if (job.isFinished()) {
+          break;
+        }
+        snapshot = job.statistics().takeSnapshot();
+        broadcaster.broadcast("job.snapshot.taken", snapshot);
+        broadcaster.broadcast("job.updated", job);
       }
     });
     results.put(job.id(), job);
