@@ -78,7 +78,7 @@ $(document).ready(function () {
     }
 
     let createPoint = function (snapshot) {
-        return [snapshot.instant, snapshot.count]
+        return [(snapshot.instant / 1000).toFixed(3), snapshot.count]
     }
 
     let updateJob = function (job) {
@@ -102,10 +102,9 @@ $(document).ready(function () {
             html += "<th scope='row'>" + job.id + "</th>"
             html += "<td>" + job.spec.name + "</td>"
             html += "<td>" + job.spec.type + "</td>"
-            html += "<td>" + job.spec.quantity + "</td>"
             html += "<td>" + job.statistics.count + "</td>"
-            html += "<td>" + (job.statistics.duration / 1000).toFixed(2) + "</td>"
-            html += "<td>" + (job.statistics.count * 100 / job.spec.quantity).toFixed(2) + "</td>"
+            html += "<td>" + (job.statistics.duration / 1000).toFixed(3) + "s</td>"
+            html += "<td>" + (job.statistics.count * 100 / job.spec.quantity).toFixed(2) + "%</td>"
             html += "<td>" + job.state + "</td>"
             html += "</tr>"
             return html
@@ -141,7 +140,7 @@ $(document).ready(function () {
         let data = []
         for (let id in finishedJobs) {
             categories.push(finishedJobs[id].spec.name)
-            data.push(finishedJobs[id].statistics.duration)
+            data.push(finishedJobs[id].statistics.duration / 1000)
         }
         durationChart.xAxis[0].setCategories(categories)
         durationChart.series[0].setData(data, false)
