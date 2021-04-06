@@ -20,13 +20,11 @@
             <thead>
             <tr class="table-primary">
                 <th scope="row">Job ID</th>
-                <th scope="row">Name</th>
-                <th scope="col">Cache</th>
-                <th scope="col">Entries</th>
-                <th scope="col">Size</th>
-                <th scope="col">Threads</th>
-                <th scope="col">Entries Count</th>
-                <th scope="col">Elapsed Time</th>
+                <th scope="col">Type</th>
+                <th scope="col">Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Count</th>
+                <th scope="col">Duration</th>
                 <th scope="col">Progress</th>
                 <th scope="col">State</th>
             </tr>
@@ -43,47 +41,6 @@
     <div class="container">
         <div id="job-duration"></div>
     </div>
-</div>
-<div class="container">
-    <div class="row">
-        <h2 class="display-4">Submit New Job</h2>
-    </div>
-    <fieldset name="job">
-        <div class="form-group">
-            <label for="job-name">ID</label>
-            <input id="job-name" class="form-control" type="text"
-                   placeholder="Enter job name">
-        </div>
-
-        <div class="form-group">
-            <label for="job-cache">Cache</label>
-            <input id="job-cache" class="form-control" type="text"
-                   placeholder="Enter cache name">
-        </div>
-        <div class="form-group">
-            <label for="job-entries">Entries</label>
-            <input id="job-entries" class="form-control" type="text"
-                   placeholder="Enter number of entries">
-        </div>
-        <div class="form-group">
-            <label for="job-size">Entry Size</label>
-            <input id="job-size" class="form-control" type="text"
-                   placeholder="Enter entry size">
-        </div>
-        <div class="form-group">
-            <label for="job-snapshot">Snapshot Interval</label>
-            <input id="job-snapshot" class="form-control" type="text"
-                   placeholder="Enter snapshot time interval">
-        </div>
-        <div class="form-group">
-            <label for="job-threads">Threads</label>
-            <input id="job-threads" class="form-control" type="text"
-                   placeholder="Enter number of threads">
-        </div>
-        <div class="form-group">
-            <input type="button" class="btn btn-primary" id="job-submit" name="submit" value="Submit Job">
-        </div>
-    </fieldset>
 </div>
 </body>
 </html>

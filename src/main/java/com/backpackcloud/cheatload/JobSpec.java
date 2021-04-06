@@ -1,6 +1,7 @@
 package com.backpackcloud.cheatload;
 
 import com.backpackcloud.cheatload.impl.jobs.InfinispanJobSpec;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -10,7 +11,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public interface JobSpec {
 
+  @JsonProperty
   String type();
+
+  @JsonProperty
+  long quantity();
 
   Job newJob();
 

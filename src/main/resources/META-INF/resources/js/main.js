@@ -100,18 +100,12 @@ $(document).ready(function () {
             }
             let html = "<tr id='job-" + job.id + "' class='job-row table-" + rowClass + "'>"
             html += "<th scope='row'>" + job.id + "</th>"
-            html += "<td>" + job.definition.name + "</td>"
-            html += "<td>" + job.definition.cache + "</td>"
-            html += "<td>" + job.definition.entries + "</td>"
-            html += "<td>" + job.definition.size + "</td>"
-            html += "<td>" + job.definition.threads + "</td>"
+            html += "<td>" + job.spec.name + "</td>"
+            html += "<td>" + job.spec.type + "</td>"
+            html += "<td>" + job.spec.quantity + "</td>"
             html += "<td>" + job.statistics.count + "</td>"
-            if (job.statistics.elapsedTime) {
-                html += "<td>" + job.statistics.elapsedTime.displayValue + "</td>"
-            } else {
-                html += "<td></td>"
-            }
-            html += "<td>" + (job.statistics.progress * 100).toFixed(2) + "</td>"
+            html += "<td>" + (job.statistics.duration / 1000).toFixed(2) + "</td>"
+            html += "<td>" + (job.statistics.count * 100 / job.spec.quantity).toFixed(2) + "</td>"
             html += "<td>" + job.state + "</td>"
             html += "</tr>"
             return html
@@ -132,7 +126,7 @@ $(document).ready(function () {
             }
         } else {
             series[job.id] = chart.addSeries({
-                name: job.definition.name,
+                name: job.spec.name,
                 data: createChartData(job)
             }, false)
         }
@@ -142,29 +136,11 @@ $(document).ready(function () {
         }
     };
 
-    $("#job-submit").click(function () {
-        payload = [{
-            "name": $("#job-name").val(),
-            "cache": $("#job-cache").val(),
-            "entries": $("#job-entries").val(),
-            "size": $("#job-size").val(),
-            "snapshotInterval": $("#job-snapshot").val(),
-            "threads": $("#job-threads").val()
-        }]
-        $.ajax({
-            url: "jobs",
-            type: "POST",
-            contentType: 'application/json; charset=utf-8',
-            dataType: "json",
-            data: JSON.stringify(payload)
-        });
-    })
-
     let updateDurationChart = function () {
         let categories = []
         let data = []
         for (let id in finishedJobs) {
-            categories.push(finishedJobs[id].definition.name)
+            categories.push(finishedJobs[id].spec.name)
             data.push(finishedJobs[id].statistics.duration)
         }
         durationChart.xAxis[0].setCategories(categories)

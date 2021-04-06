@@ -53,7 +53,7 @@ public class InfinispanJobExecutor implements JobExecutor<InfinispanJob> {
 
     job.picked();
     byte[] data = new byte[job.spec().size()];
-    long entries = job.spec().entries();
+    long entries = job.spec().quantity();
     JobStatistics statistics = job.statistics();
     for (int i = 0; i < threads; i++) {
       dataPushExecutor.execute(() -> {

@@ -41,12 +41,16 @@ public class StandaloneJobManager implements JobManager {
       .findFirst()
       .map(JobPicker::executor)
       .orElseThrow(() -> new RequestException("There is no executor suitable for picking the given job."));
-    executorService.submit(() -> executor.execute(job));
+    executorService.submit(() -> {
+      executor.execute(job);
+      broadcaster.broadcast("job.finished", job);
+    });
     snapshotService.submit(() -> {
       JobSnapshot snapshot;
       while (!job.isFinished()) {
         snapshot = job.statistics().takeSnapshot();
         broadcaster.broadcast("job.snapshot.taken", snapshot);
+        broadcaster.broadcast("job.updated", job);
         try {
           Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -55,7 +59,7 @@ public class StandaloneJobManager implements JobManager {
       }
     });
     results.put(job.id(), job);
-    broadcaster.broadcast(new JobEvent("job.created", job));
+    broadcaster.broadcast("job.created", job);
     return job;
   }
 

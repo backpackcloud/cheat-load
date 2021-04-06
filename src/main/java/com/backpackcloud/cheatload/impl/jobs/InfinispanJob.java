@@ -63,19 +63,4 @@ public class InfinispanJob implements Job {
     }
   }
 
-  @JsonIgnore
-  public boolean isWaiting() {
-    return state == JobState.WAITING;
-  }
-
-  @JsonIgnore
-  public boolean isRunning() {
-    return state == JobState.RUNNING;
-  }
-
-  @JsonIgnore
-  public boolean isFinished() {
-    return state == JobState.FAIL || state == JobState.SUCCESS;
-  }
-
 }

@@ -11,19 +11,19 @@ public class InfinispanJobSpec implements JobSpec {
 
   private final String name;
   private final String cache;
-  private final long entries;
+  private final long quantity;
   private final int size;
   private final int threads;
 
   @JsonCreator
   public InfinispanJobSpec(@JsonProperty("name") String name,
                            @JsonProperty("cache") String cache,
-                           @JsonProperty("entries") long entries,
+                           @JsonProperty("quantity") long quantity,
                            @JsonProperty("size") int size,
                            @JsonProperty("threads") int threads) {
     this.name = name;
     this.cache = cache;
-    this.entries = Optional.ofNullable(entries).orElse(1000L);
+    this.quantity = Optional.ofNullable(quantity).orElse(1000L);
     this.size = Optional.ofNullable(size).orElse(1000);
     this.threads = Optional.ofNullable(threads).orElse(1);
   }
@@ -44,8 +44,8 @@ public class InfinispanJobSpec implements JobSpec {
   }
 
   @JsonProperty
-  public long entries() {
-    return entries;
+  public long quantity() {
+    return quantity;
   }
 
   @JsonProperty

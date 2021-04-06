@@ -44,6 +44,8 @@ public class WebsocketController {
     sessions.remove(session.getId());
   }
 
+
+
   private void sendUpdate(String eventName, Job job) {
     sessions.values().forEach(session -> {
       try {

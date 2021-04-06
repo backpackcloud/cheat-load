@@ -67,17 +67,7 @@ public class JobStatistics {
   }
 
   @JsonProperty
-  public double duration() {
-    if (start == null) {
-      return 0;
-    }
-
-    Duration duration = Duration.between(start, (end != null ? end : LocalDateTime.now()));
-    return duration.toSeconds() + (duration.toMillisPart() / 1000.0);
-  }
-
-  @JsonProperty
-  public long elapsedTime() {
+  public long duration() {
     if (start == null) {
       return 0;
     }
