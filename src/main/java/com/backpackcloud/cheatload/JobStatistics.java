@@ -37,6 +37,7 @@ public class JobStatistics {
     if (start == null) {
       start = LocalDateTime.now();
       startMillis = System.currentTimeMillis();
+       snapshots.add(new JobSnapshot(startMillis, 0, 0));
     }
   }
 
