@@ -49,7 +49,7 @@ public class InfinispanJobExecutor implements JobExecutor<InfinispanJob> {
     ExecutorService dataPushExecutor = Executors.newFixedThreadPool(threads);
     AtomicLong count = new AtomicLong(0);
 
-    RemoteCache<String, byte[]> dataTestCache = remoteCacheManager.getCache(job.spec().cache());
+    RemoteCache<String, byte[]> cache = remoteCacheManager.getCache(job.spec().cache());
 
     job.picked();
     byte[] data = new byte[job.spec().size()];
@@ -60,7 +60,7 @@ public class InfinispanJobExecutor implements JobExecutor<InfinispanJob> {
         while (job.isRunning() && count.incrementAndGet() <= entries) {
           statistics.incrementCount();
           try {
-            dataTestCache.put(UUID.randomUUID().toString(), data);
+            cache.put(UUID.randomUUID().toString(), data);
           } catch (Exception e) {
             LOGGER.errorf(e, "[%s] Error while adding data", job.id());
             job.failed();
