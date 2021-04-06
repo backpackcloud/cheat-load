@@ -100,8 +100,8 @@ $(document).ready(function () {
             }
             let html = "<tr id='job-" + job.id + "' class='job-row table-" + rowClass + "'>"
             html += "<th scope='row'>" + job.id + "</th>"
-            html += "<td>" + job.spec.name + "</td>"
             html += "<td>" + job.spec.type + "</td>"
+            html += "<td>" + job.spec.name + "</td>"
             html += "<td>" + job.statistics.count + "</td>"
             html += "<td>" + (job.statistics.duration / 1000).toFixed(3) + "s</td>"
             html += "<td>" + (job.statistics.count * 100 / job.spec.quantity).toFixed(2) + "%</td>"
