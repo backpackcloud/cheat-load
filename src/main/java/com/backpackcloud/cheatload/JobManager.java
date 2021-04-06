@@ -18,4 +18,6 @@ public interface JobManager {
 
   Collection<Job> listFinished();
 
+  void clearFinished();
+
 }
