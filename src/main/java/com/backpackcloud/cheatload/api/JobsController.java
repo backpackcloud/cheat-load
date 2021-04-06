@@ -25,4 +25,7 @@ public interface JobsController {
   @Produces("application/json")
   Response getJobs();
 
+  @DELETE
+  Response clearJobs();
+
 }

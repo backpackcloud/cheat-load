@@ -42,4 +42,11 @@ public class JobControllerImpl implements JobsController {
       .link("/jobs").to("_self")
       .toResponse();
   }
+
+  @Override
+  public Response clearJobs() {
+    jobManager.clearFinished();
+    return Response.ok().build();
+  }
+
 }
