@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = InfinispanJobExecutor.class, name = "infinispan"),
 })
-public interface JobExecutor<E extends Job> {
+public interface JobExecutor<E extends JobSpec> {
 
   String type();
-  void execute(E job);
+  void execute(Job<E> job);
 
 }
 

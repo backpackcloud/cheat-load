@@ -7,38 +7,73 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 
 @Link(uri = "/jobs/{id}", rel = "_self")
-public interface Job {
+public class Job<E extends JobSpec> {
+
+  private final UUID id;
+  private final E spec;
+  private final JobStatistics statistics;
+  private JobState state;
+
+  public Job(UUID id, E spec) {
+    this.id = id;
+    this.spec = spec;
+    this.state = JobState.WAITING;
+    this.statistics = new JobStatistics();
+  }
 
   @JsonProperty
-  UUID id();
+  public UUID id() {
+    return id;
+  }
 
   @JsonProperty
-  JobSpec spec();
+  public E spec() {
+    return spec;
+  }
 
   @JsonProperty
-  JobStatistics statistics();
+  public JobState state() {
+    return state;
+  }
 
   @JsonProperty
-  JobState state();
+  public JobStatistics statistics() {
+    return statistics;
+  }
 
-  void pick();
+  public void pick() {
+    if (state == JobState.WAITING) {
+      state = JobState.RUNNING;
+      statistics.start();
+    }
+  }
 
-  void fail();
+  public void fail() {
+    if (state == JobState.RUNNING) {
+      state = JobState.FAIL;
+      statistics.end();
+    }
+  }
 
-  void done();
+  public void done() {
+    if (state == JobState.RUNNING) {
+      state = JobState.SUCCESS;
+      statistics.end();
+    }
+  }
 
   @JsonIgnore
-  default boolean isWaiting() {
+  public boolean isWaiting() {
     return state() == JobState.WAITING;
   }
 
   @JsonIgnore
-  default boolean isRunning() {
+  public boolean isRunning() {
     return state() == JobState.RUNNING;
   }
 
   @JsonIgnore
-  default boolean isFinished() {
+  public boolean isFinished() {
     return state() == JobState.FAIL || state() == JobState.SUCCESS;
   }
 

@@ -69,6 +69,7 @@ $(document).ready(function () {
             html += "<th scope='row'>" + job.id + "</th>"
             html += "<td>" + job.spec.type + "</td>"
             html += "<td>" + job.spec.name + "</td>"
+            html += "<td>" + job.spec.threads + "</td>"
             html += "<td>" + job.statistics.count + "</td>"
             html += "<td>" + (job.statistics.duration / 1000).toFixed(3) + "s</td>"
             html += "<td>" + (job.statistics.count * 100 / job.spec.quantity).toFixed(2) + "%</td>"

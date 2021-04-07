@@ -34,7 +34,7 @@ public class StandaloneJobManager implements JobManager {
   }
 
   public Job submit(JobRequest jobRequest) {
-    Job job = jobRequest.spec().newJob();
+    Job job = new Job(UUID.randomUUID(), jobRequest.spec());
     JobExecutor executor = jobPickers.stream()
       .filter(picker -> picker.executor().type().equals(jobRequest.spec().type()))
       .filter(picker -> picker.selector().test(jobRequest.tags()))

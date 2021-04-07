@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public class InfinispanJobSpec implements JobSpec {
 
@@ -56,11 +55,6 @@ public class InfinispanJobSpec implements JobSpec {
   @JsonProperty
   public int threads() {
     return threads;
-  }
-
-  @Override
-  public InfinispanJob newJob() {
-    return new InfinispanJob(UUID.randomUUID(), this);
   }
 
 }

@@ -23,6 +23,4 @@ public interface JobSpec {
   @JsonProperty
   int threads();
 
-  Job newJob();
-
 }

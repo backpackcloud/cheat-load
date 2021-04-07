@@ -3,8 +3,6 @@ package com.backpackcloud.cheatload.impl.cdi;
 import com.backpackcloud.cheatload.*;
 import com.backpackcloud.cheatload.impl.StandaloneJobManager;
  import com.backpackcloud.cheatload.impl.executors.InfinispanJobExecutor;
-import com.backpackcloud.cheatload.impl.jobs.InfinispanJob;
-import com.backpackcloud.zipper.Configuration;
 import com.backpackcloud.zipper.Selector;
 import com.backpackcloud.zipper.Serializer;
 import io.quarkus.vertx.LocalEventBusCodec;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import static com.backpackcloud.zipper.Configuration.*;
 
@@ -46,7 +43,6 @@ public class JobManagerProducer {
   }
 
   private void registerCodecs(EventBus eventBus) {
-    eventBus.getDelegate().registerDefaultCodec(InfinispanJob.class, new LocalEventBusCodec<>());
     eventBus.getDelegate().registerDefaultCodec(JobSnapshot.class, new LocalEventBusCodec<>());
     eventBus.getDelegate().registerDefaultCodec(JobEvent.class, new LocalEventBusCodec<>());
   }

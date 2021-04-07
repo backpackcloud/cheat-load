@@ -1,7 +1,8 @@
 package com.backpackcloud.cheatload.impl.executors;
 
+import com.backpackcloud.cheatload.Job;
 import com.backpackcloud.cheatload.JobExecutor;
-import com.backpackcloud.cheatload.impl.jobs.InfinispanJob;
+import com.backpackcloud.cheatload.impl.jobs.InfinispanJobSpec;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.infinispan.client.hotrod.RemoteCache;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-public class InfinispanJobExecutor implements JobExecutor<InfinispanJob> {
+public class InfinispanJobExecutor implements JobExecutor<InfinispanJobSpec> {
   private static final Logger LOGGER = Logger.getLogger(InfinispanJobExecutor.class);
 
   private final RemoteCacheManager remoteCacheManager;
@@ -38,7 +39,7 @@ public class InfinispanJobExecutor implements JobExecutor<InfinispanJob> {
   }
 
   @Override
-  public void execute(InfinispanJob job) {
+  public void execute(Job<InfinispanJobSpec> job) {
     LOGGER.infof("[%s] Initializing", job.id());
 
     RemoteCache<String, byte[]> cache = remoteCacheManager.getCache(job.spec().cache());
