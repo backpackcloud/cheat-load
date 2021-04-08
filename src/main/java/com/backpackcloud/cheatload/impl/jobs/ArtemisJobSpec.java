@@ -1,0 +1,60 @@
+package com.backpackcloud.cheatload.impl.jobs;
+
+import com.backpackcloud.cheatload.JobSpec;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Optional;
+
+public class ArtemisJobSpec implements JobSpec {
+
+  private final String name;
+  private final String queue;
+  private final long quantity;
+  private final int size;
+  private final int threads;
+
+  @JsonCreator
+  public ArtemisJobSpec(@JsonProperty("name") String name,
+                        @JsonProperty("queue") String queue,
+                        @JsonProperty("quantity") long quantity,
+                        @JsonProperty("size") int size,
+                        @JsonProperty("threads") int threads) {
+    this.name = name;
+    this.queue = queue;
+    this.quantity = Optional.ofNullable(quantity).orElse(1000L);
+    this.size = Optional.ofNullable(size).orElse(1000);
+    this.threads = Optional.ofNullable(threads).orElse(1);
+  }
+
+  @Override
+  public String type() {
+    return "artemis";
+  }
+
+  @JsonProperty
+  public String name() {
+    return name;
+  }
+
+  @JsonProperty
+  public String queue() {
+    return queue;
+  }
+
+  @JsonProperty
+  public long quantity() {
+    return quantity;
+  }
+
+  @JsonProperty
+  public int size() {
+    return size;
+  }
+
+  @JsonProperty
+  public int threads() {
+    return threads;
+  }
+
+}
