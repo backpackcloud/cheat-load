@@ -60,6 +60,10 @@ public class WebsocketController {
     sendUpdate("job.finished", job);
   }
 
+  public void clearJobs() {
+    sendUpdate("clear", null);
+  }
+
   private void sendUpdate(String eventName, Job job) {
     sessions.values().forEach(session -> {
       try {

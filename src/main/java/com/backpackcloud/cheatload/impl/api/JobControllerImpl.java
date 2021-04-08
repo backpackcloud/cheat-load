@@ -20,6 +20,9 @@ public class JobControllerImpl implements JobsController {
   @Inject
   JobManager jobManager;
 
+  @Inject
+  WebsocketController websocketController;
+
   @Override
   public Response createJobs(List<JobRequest> requests) {
     List<Job> jobs = requests.stream()
@@ -46,6 +49,7 @@ public class JobControllerImpl implements JobsController {
   @Override
   public Response clearJobs() {
     jobManager.clearFinished();
+    websocketController.clearJobs();
     return Response.ok().build();
   }
 

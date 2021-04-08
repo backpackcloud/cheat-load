@@ -2,6 +2,18 @@ let chart
 let series = {}
 
 $(document).ready(function () {
+    let loadJobs = function () {
+        $.ajax({
+            url: "jobs",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                data.values.forEach(updateJob)
+                chart.redraw()
+            }
+        });
+    }
+
     let socket;
     chart = Highcharts.chart('job-details', {
         chart: {
@@ -29,7 +41,6 @@ $(document).ready(function () {
         tooltip: {
             headerFormat: '{point.x}s<br>',
             crosshairs: true,
-            shared: true
         },
         credits: {
             enabled: false
@@ -45,7 +56,7 @@ $(document).ready(function () {
     }
 
     let createPoint = function (snapshot) {
-        return [(snapshot.instant / 1000).toFixed(3), snapshot.count]
+        return [(snapshot.instant / 1000.0).toFixed(3), snapshot.count]
     }
 
     let updateJob = function (job) {
@@ -99,16 +110,6 @@ $(document).ready(function () {
         }
     };
 
-    $.ajax({
-        url: "jobs",
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            data.values.forEach(updateJob)
-            chart.redraw()
-        }
-    });
-
     socket = new WebSocket("ws://" + location.host + "/jobs");
     socket.onopen = function () {
         console.log("Connected to the web socket");
@@ -116,8 +117,19 @@ $(document).ready(function () {
     socket.onmessage = function (m) {
         console.log("Got message: " + m.data);
         let jobEvent = JSON.parse(m.data);
-        let job = jobEvent.job;
-        updateJob(job)
+        if (jobEvent.event === "clear") {
+            while(chart.series.length > 0) {
+                chart.series[0].remove(false);
+            }
+            series = {}
+            $("#job-list tbody").children("tr").remove()
+            loadJobs();
+        } else {
+            let job = jobEvent.job;
+            updateJob(job)
+        }
         chart.redraw()
     };
+
+    loadJobs();
 })
